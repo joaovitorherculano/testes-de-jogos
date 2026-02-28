@@ -28,5 +28,45 @@ const loop = setInterval(() => {
     }
 }, 10);
 
+    let score = 0;
+let highScore = localStorage.getItem("highScore") || 0; // Recupera o recorde salvo
+
+const elementoScore = document.getElementById("score-atual");
+const elementoHiScore = document.getElementById("hi-score-texto");
+
+// Função para formatar o número com zeros (ex: 5 vira 00005)
+function formatarScore(num) {
+    return num.toString().padStart(5, '0');
+}
+
+// Mostrar o High Score logo de cara se ele existir
+if (highScore > 0) {
+    elementoHiScore.innerText = "HI " + formatarScore(highScore);
+}
+
+function atualizarContador() {
+    score++; // Aumenta 1 ponto por frame (ou ciclo)
+    elementoScore.innerText = formatarScore(score);
+
+    // Se bater o recorde atual, o HI score brilha ou atualiza junto (opcional)
+    if (score > highScore) {
+        highScore = score;
+        elementoHiScore.innerText = "HI " + formatarScore(highScore);
+    }
+
+    // Loop do jogo (roda a ~60fps)
+    requestAnimationFrame(atualizarContador);
+}
+
+// Inicia o contador
+atualizarContador();
+
+// Função para chamar quando o Dino bater (Game Over)
+function gameOver() { 
+    localStorage.setItem("highScore", highScore); // Salva o recorde permanentemente
+    alert("Game Over! Score: " + score);
+}
+
+
 
 document.addEventListener('keydown', jump)
